@@ -2,9 +2,9 @@ package com.apps.quantitymeasurement;
 
 public class Feet {
 
-   private final double value;
+    private final double value;
 
-   public Feet(double value) {
+    public Feet(double value) {
         this.value = value;
     }
 
