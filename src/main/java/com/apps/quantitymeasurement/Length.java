@@ -1,5 +1,7 @@
 package com.apps.quantitymeasurement;
 
+import java.util.Optional;
+
 public class Length {
     private double value;
     private LengthUnit unit;
@@ -9,14 +11,19 @@ public class Length {
         this.unit=unit;
     }
 
+    public double getValue(){
+        return value;
+    }
+
     private double convertToBaseUnit(double value, LengthUnit unit){
         return value*unit.getConversionFactor();
     }
 
-    boolean compare(Length length){
+    private boolean compare(Length length){
         return Double.compare(convertToBaseUnit(length.value, length.unit), convertToBaseUnit(value, unit))==0;
     }
 
+    @Override
     public boolean equals(Object obj){
         if(this == obj){
             return true;
@@ -26,5 +33,27 @@ public class Length {
         }
         Length length = (Length) obj;
         return compare(length);
+    }
+
+    public Length convertTo(LengthUnit targetUnit){
+        //Checking null for target unit
+        Optional<LengthUnit> optionalTargetUnit = Optional.ofNullable(targetUnit);
+        optionalTargetUnit.orElseThrow(IllegalArgumentException::new);
+        //Checking null for source unit
+        Optional<LengthUnit> optionalSourceTUnit = Optional.ofNullable(unit);
+        optionalSourceTUnit.orElseThrow(IllegalArgumentException::new);
+        //Checking NaN for Infinite values
+        if(!Double.isFinite(value)){
+            throw new RuntimeException("Is infinite or NAN");
+        }
+        double valueInBaseUnit=convertToBaseUnit(value, unit);
+        double targetValue= valueInBaseUnit/targetUnit.getConversionFactor();
+        targetValue = Math.round(targetValue *100)/100.0;
+        return new Length(targetValue, targetUnit);
+    }
+
+    @Override
+    public String toString(){
+        return ""+value;
     }
 }
