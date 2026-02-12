@@ -11,7 +11,6 @@ public enum LengthUnit {
     LengthUnit(double conversionFactor){
         this.conversionFactor=conversionFactor;
     }
-
     public double getConversionFactor(){
         return conversionFactor;
     }
